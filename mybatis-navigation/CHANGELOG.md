@@ -2,6 +2,30 @@
 
 All notable changes to the "MyBatis Lite Navigation" extension will be documented in this file.
 
+## [0.0.4] - 2025-12-27
+
+### Added
+
+- **Gutter 图标导航功能**
+  - 在 Java Mapper 方法行显示 XML 跳转图标
+  - 在 XML SQL 语句行 (select/insert/update/delete) 显示 Java 跳转图标
+  - 悬停可查看目标信息，支持 `mybatis-lite.gotoMapper` 命令跳转
+
+- **完整的单元测试覆盖**
+  - 新增 Jest + ts-jest 测试框架配置
+  - 覆盖 `MapperCache`、`JavaDefinitionProvider`、`XmlDefinitionProvider`、`GutterIconProvider` 核心模块
+  - 创建完整的 VSCode API Mock 实现
+
+### Fixed
+
+- **性能优化：修复 `decorateJavaFile` 重复打开 XML 文档的问题**
+  - 将 `openTextDocument(xmlUri)` 调用移至循环外部，避免 N 次重复打开同一文件
+
+- **资源管理：添加 `MapperCache.dispose()` 方法**
+  - FileSystemWatcher 现在会被正确保存并在扩展卸载时释放
+
+---
+
 ## [0.0.2] - 2025-12-27
 
 ### Fixed

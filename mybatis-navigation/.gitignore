@@ -3,3 +3,4 @@ dist/
 *.vsix
 out/
 .vscode-test/
+coverage/

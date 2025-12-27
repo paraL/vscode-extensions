@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 
 export class MapperCache {
     private namespaceMap: Map<string, vscode.Uri> = new Map();
+    private watcher: vscode.FileSystemWatcher | undefined;
 
     constructor() {
         // Note: call initialize() explicitly after construction
@@ -29,10 +30,10 @@ export class MapperCache {
     }
 
     private startWatcher() {
-        const watcher = vscode.workspace.createFileSystemWatcher('**/*.xml');
-        watcher.onDidChange(uri => this.parseFile(uri));
-        watcher.onDidCreate(uri => this.parseFile(uri));
-        watcher.onDidDelete(uri => this.removeFile(uri));
+        this.watcher = vscode.workspace.createFileSystemWatcher('**/*.xml');
+        this.watcher.onDidChange(uri => this.parseFile(uri));
+        this.watcher.onDidCreate(uri => this.parseFile(uri));
+        this.watcher.onDidDelete(uri => this.removeFile(uri));
     }
 
     private async parseFile(uri: vscode.Uri) {
@@ -57,6 +58,17 @@ export class MapperCache {
                 this.namespaceMap.delete(namespace);
                 break;
             }
+        }
+    }
+
+    /**
+     * Dispose the file watcher.
+     * Call this when the extension is deactivated.
+     */
+    public dispose() {
+        if (this.watcher) {
+            this.watcher.dispose();
+            this.watcher = undefined;
         }
     }
 }

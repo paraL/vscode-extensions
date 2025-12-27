@@ -87,6 +87,10 @@ export class GutterIconProvider {
         const methodRegex = /^\s*(?:(?:public|private|protected)\s+)?(?:[\w<>\[\],\s?]+)\s+(\w+)\s*\([^;]*?\)\s*;/gm;
         let match;
 
+        // Open XML document once before the loop (performance fix)
+        const xmlDoc = await vscode.workspace.openTextDocument(xmlUri);
+        const xmlText = xmlDoc.getText();
+
         while ((match = methodRegex.exec(text)) !== null) {
             const methodName = match[1];
             // Find the position of method name within the match to get correct line
@@ -94,8 +98,6 @@ export class GutterIconProvider {
             const line = document.positionAt(methodNameIndex).line;
 
             // Find corresponding position in XML
-            const xmlDoc = await vscode.workspace.openTextDocument(xmlUri);
-            const xmlText = xmlDoc.getText();
             const idRegex = new RegExp(`<\\w+\\s+[^>]*id=["']${methodName}["'][^>]*>`, 'g');
             const xmlMatch = idRegex.exec(xmlText);
 
