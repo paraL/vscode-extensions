@@ -3,10 +3,11 @@ import { MapperCache } from './mapperCache';
 import { JavaDefinitionProvider } from './javaProvider';
 import { XmlDefinitionProvider } from './xmlProvider';
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
     console.log('MyBatis Lite Navigation is activating...');
 
     const cache = new MapperCache();
+    await cache.initialize();
 
     // Register Java -> XML provider
     const javaSelector = { language: 'java', scheme: 'file' };

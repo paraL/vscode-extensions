@@ -31,9 +31,14 @@ export class JavaDefinitionProvider implements vscode.DefinitionProvider {
         // For simplicity, we assume the file defines the interface matching the filename
 
         const fqcn = `${packageName}.${className}`;
+        console.log(`[MyBatis] Looking for namespace: ${fqcn}, method: ${methodName}`);
 
         const xmlUri = this.cache.getXmlUri(fqcn);
-        if (!xmlUri) return;
+        if (!xmlUri) {
+            console.log(`[MyBatis] No XML found for namespace: ${fqcn}`);
+            return;
+        }
+        console.log(`[MyBatis] Found XML: ${xmlUri.fsPath}`);
 
         // Open XML and find method ID
         const xmlDoc = await vscode.workspace.openTextDocument(xmlUri);

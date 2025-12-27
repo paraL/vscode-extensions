@@ -5,8 +5,13 @@ export class MapperCache {
     private namespaceMap: Map<string, vscode.Uri> = new Map();
 
     constructor() {
-        this.refresh();
+        // Note: call initialize() explicitly after construction
+    }
+
+    public async initialize() {
+        await this.refresh();
         this.startWatcher();
+        console.log('[MyBatis Cache] Initialization complete');
     }
 
     public getXmlUri(namespace: string): vscode.Uri | undefined {
@@ -16,9 +21,11 @@ export class MapperCache {
     public async refresh() {
         this.namespaceMap.clear();
         const files = await vscode.workspace.findFiles('**/*.xml', '**/node_modules/**');
+        console.log(`[MyBatis Cache] Found ${files.length} XML files`);
         for (const file of files) {
-            this.parseFile(file);
+            await this.parseFile(file);
         }
+        console.log(`[MyBatis Cache] Loaded ${this.namespaceMap.size} mapper namespaces`);
     }
 
     private startWatcher() {
@@ -37,7 +44,7 @@ export class MapperCache {
             if (match && match[1]) {
                 const namespace = match[1];
                 this.namespaceMap.set(namespace, uri);
-                // console.log(`Mapped namespace ${namespace} to ${uri.fsPath}`);
+                console.log(`[MyBatis Cache] Mapped: ${namespace}`);
             }
         } catch (error) {
             console.error(`Error parsing XML: ${uri.fsPath}`, error);
