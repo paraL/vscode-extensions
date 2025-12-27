@@ -3,7 +3,7 @@
     "displayName": "MyBatis Lite Navigation",
     "description": "Lightweight, configuration-free bidirectional navigation for MyBatis.",
     "icon": "icon.png",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "engines": {
         "vscode": "^1.80.0"
     },
@@ -14,7 +14,14 @@
         "onStartupFinished"
     ],
     "main": "./dist/extension.js",
-    "contributes": {},
+    "contributes": {
+        "commands": [
+            {
+                "command": "mybatis-lite.gotoMapper",
+                "title": "Go to MyBatis Mapper"
+            }
+        ]
+    },
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
