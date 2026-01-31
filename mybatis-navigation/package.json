@@ -4,6 +4,11 @@
     "description": "Lightweight, configuration-free bidirectional navigation for MyBatis.",
     "icon": "icon.png",
     "version": "0.0.3",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/example/mybatis-lite-navigation"
+    },
     "engines": {
         "vscode": "^1.80.0"
     },

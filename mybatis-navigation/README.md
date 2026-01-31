@@ -1,34 +1,47 @@
 # MyBatis Lite Navigation
 
-A lightweight, zero-configuration VS Code extension for bidirectional navigation between MyBatis Mapper Interfaces and XML Mapper files.
+轻量级、零配置的 VS Code 扩展，支持 MyBatis Mapper 接口与 XML 文件之间的双向导航。
 
-## Features
+## ✨ 功能特性
 
-- **Java to XML**: Ctrl+Click (or Go to Definition) on a Mapper interface method to jump to the corresponding SQL definition in the XML file.
-- **XML to Java**: Ctrl+Click (or Go to Definition) on an SQL ID (e.g., `<select id="selectUser">`) to jump to the corresponding method in the Java interface.
+- **Java → XML**：在 Mapper 接口方法上 Ctrl+Click，跳转到 XML 文件中对应的 SQL 定义
+- **XML → Java**：在 SQL ID 上 Ctrl+Click（如 `<select id="selectUser">`），跳转到 Java 接口中对应的方法
+- **边栏图标**：可视化的边栏图标，快速导航
 
-## Requirements
+## 📋 环境要求
 
-- VS Code 1.80.0 or newer.
-- A standard directory structure is NOT required. The extension scans all `*.xml` files in the workspace to map namespaces.
+- VS Code 1.80.0 或更高版本
+- 无需任何配置，开箱即用！
 
-## How it works
+## 🔍 工作原理
 
-1. **Scanning**: On startup, it scans all `.xml` files to find `<mapper namespace="...">` tags and builds a cache.
-2. **From Java**: It uses the file's package declaration + filename to construct the Fully Qualified Class Name (FQCN). It looks up the FQCN in the cache to find the XML file, then searches for the method ID.
-3. **From XML**: It reads the `namespace` attribute to determine the target Java class. It searches the workspace for a file matching the class name and verification of the package.
+1. **扫描阶段**：启动时扫描所有 `.xml` 文件，找到 `<mapper namespace="...">` 标签并构建缓存
+2. **Java → XML**：根据文件的 package 声明 + 文件名构建全限定类名 (FQCN)，查找对应的 XML 文件和方法
+3. **XML → Java**：读取 `namespace` 属性确定目标 Java 类，导航到匹配的方法
 
-## Commands
+## 🛠️ 命令
 
-- `MyBatis Lite Navigation: Refresh Cache`: Manually trigger a re-scan of XML files (useful if file watchers miss a change).
+| 命令 | 说明 |
+|------|------|
+| `MyBatis Lite Navigation: Refresh Cache` | 手动重新扫描 XML 文件 |
 
-## Extension Settings
+## 📦 安装
 
-None! It just works.
+### 从 VSIX 安装
 
-## Installation from Source
+```bash
+code --install-extension mybatis-lite-navigation-0.0.3.vsix
+```
 
-1. Clone repo.
-2. `npm install`
-3. `F5` to debug.
-4. `npm run compile` to build.
+或者在 VS Code 中：**扩展视图 → ⋯ → 从 VSIX 安装...**
+
+## 🔧 开发与打包
+
+```bash
+# 安装依赖 + 打包扩展（一条命令搞定）
+npm install && npx vsce package
+```
+
+## 📄 开源协议
+
+[MIT](LICENSE)
