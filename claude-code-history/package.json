@@ -1,0 +1,148 @@
+{
+  "name": "claude-code-history-viewer",
+  "displayName": "Claude Code History Viewer",
+  "description": "Browse Claude Code conversation history, view file diffs, and search past sessions.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "history",
+    "diff",
+    "conversation"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "cch.refreshSessions",
+        "title": "Refresh Sessions",
+        "category": "CCH",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "cch.openSidePanel",
+        "title": "Open Claude Code History",
+        "category": "CCH"
+      },
+      {
+        "command": "cch.openSettings",
+        "title": "Open Settings",
+        "category": "CCH",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "cch.showDiff",
+        "title": "Show File Diff",
+        "category": "CCH",
+        "enablement": "false"
+      },
+      {
+        "command": "cch.applyChanges",
+        "title": "Apply Changes to Workspace",
+        "category": "CCH",
+        "enablement": "false"
+      },
+      {
+        "command": "cch.exportMarkdown",
+        "title": "Export Session to Markdown",
+        "category": "CCH",
+        "icon": "$(markdown)"
+      }
+    ],
+    "views": {
+      "cch-panel": [
+        {
+          "id": "cch.sidePanel",
+          "name": "Claude Code History",
+          "type": "webview",
+          "visibility": "visible"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "cch-panel",
+          "title": "Claude Code History",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "cch.refreshSessions",
+          "when": "view == cch.sidePanel",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Claude Code History",
+      "properties": {
+        "cch.claudeDirectory": {
+          "type": "string",
+          "default": "",
+          "description": "Path to .claude directory (auto-detected if empty)"
+        },
+        "cch.autoRefreshEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic refresh for recent sessions"
+        },
+        "cch.autoRefreshInterval": {
+          "type": "number",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 24,
+          "description": "Auto-refresh interval in hours"
+        },
+        "cch.maxFileSize": {
+          "type": "number",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 200,
+          "description": "Maximum JSONL file size in MB to parse"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "cch.openSidePanel",
+        "key": "ctrl+shift+j",
+        "mac": "cmd+shift+j"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "package:vsix": "npx @vscode/vsce package --allow-missing-repository"
+  },
+  "dependencies": {
+    "diff": "^8.0.3",
+    "highlight.js": "^11.10.0",
+    "marked": "^17.0.1"
+  },
+  "devDependencies": {
+    "@types/diff": "^7.0.0",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.80.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.1.6"
+  }
+}
