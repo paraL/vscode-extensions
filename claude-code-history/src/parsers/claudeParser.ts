@@ -153,6 +153,7 @@ export function loadSessionList(claudeDir: string): Session[] {
       let firstTimestamp = '';
       let lastTimestamp = '';
       let messageCount = 0;
+      let sessionCwd = '';
       const titleMessages: ParsedMessage[] = [];
 
       for (let i = 0; i < jsonLines.length; i++) {
@@ -160,6 +161,9 @@ export function loadSessionList(claudeDir: string): Session[] {
           const entry = JSON.parse(jsonLines[i]);
           if (!sessionId && entry.sessionId) {
             sessionId = entry.sessionId;
+          }
+          if (!sessionCwd && entry.cwd) {
+            sessionCwd = entry.cwd;
           }
           if (!firstTimestamp && entry.timestamp) {
             firstTimestamp = entry.timestamp;
@@ -194,6 +198,7 @@ export function loadSessionList(claudeDir: string): Session[] {
         endTime: lastTimestamp,
         messageCount,
         filePath,
+        cwd: sessionCwd || undefined,
         source: 'claude',
       });
     } catch {

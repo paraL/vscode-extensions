@@ -7,6 +7,7 @@ export interface Session {
   endTime: string;
   messageCount: number;
   filePath: string; // path to the JSONL file
+  cwd?: string; // real working directory from JSONL
   source: 'claude';
 }
 
@@ -105,7 +106,8 @@ export type WebviewMessage =
   | { command: 'openFile'; filePath: string }
   | { command: 'refresh' }
   | { command: 'getProjects' }
-  | { command: 'exportMarkdown'; filePath: string };
+  | { command: 'exportMarkdown'; filePath: string }
+  | { command: 'resumeSession'; sessionId: string; cwd?: string };
 
 /** Messages sent from extension to webview */
 export type ExtensionMessage =

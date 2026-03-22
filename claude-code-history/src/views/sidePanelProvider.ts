@@ -184,6 +184,20 @@ export class SidePanelProvider implements vscode.WebviewViewProvider {
         await this.exportToMarkdown(msg.filePath);
         break;
       }
+
+      case 'resumeSession': {
+        const sessionId = msg.sessionId;
+        if (sessionId) {
+          const cwd = msg.cwd && fs.existsSync(msg.cwd) ? msg.cwd : undefined;
+          const terminal = vscode.window.createTerminal({
+            name: `Claude Resume: ${sessionId.substring(0, 8)}`,
+            cwd,
+          });
+          terminal.show();
+          terminal.sendText(`claude --resume "${sessionId}"`);
+        }
+        break;
+      }
     }
   }
 
@@ -269,6 +283,7 @@ export class SidePanelProvider implements vscode.WebviewViewProvider {
         </button>
         <h2 id="headerTitle">Claude History</h2>
         <div class="header-actions">
+          <button id="resumeDetailBtn" class="icon-btn hidden" title="Resume this session">▶</button>
           <button id="refreshBtn" class="icon-btn" title="Refresh">⟳</button>
         </div>
       </div>

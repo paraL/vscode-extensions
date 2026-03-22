@@ -16,6 +16,7 @@
   const backBtn = $('backBtn');
   const headerTitle = $('headerTitle');
   const refreshBtn = $('refreshBtn');
+  const resumeDetailBtn = $('resumeDetailBtn');
   const tabBar = $('tabBar');
   const searchInput = $('searchInput');
   const projectSelect = $('projectSelect');
@@ -32,6 +33,11 @@
   // Event listeners
   backBtn.addEventListener('click', showListView);
   refreshBtn.addEventListener('click', () => vscode.postMessage({ command: 'refresh' }));
+  resumeDetailBtn.addEventListener('click', () => {
+    if (currentDetail?.session?.sessionId) {
+      vscode.postMessage({ command: 'resumeSession', sessionId: currentDetail.session.sessionId, cwd: currentDetail.session.cwd });
+    }
+  });
 
   searchInput.addEventListener('input', () => {
     clearTimeout(searchTimeout);
@@ -80,9 +86,7 @@
 
   function handleSessionsLoaded(msg) {
     allSessions = msg.sessions || [];
-    if (msg.currentProject) {
-      currentProject = msg.currentProject;
-    }
+    // 默认不自动选中当前项目，保持 All Projects
     populateProjectFilter();
     renderSessions();
   }
@@ -106,6 +110,7 @@
   function showListView() {
     currentView = 'list';
     backBtn.classList.add('hidden');
+    resumeDetailBtn.classList.add('hidden');
     headerTitle.textContent = 'Claude History';
     tabBar.classList.add('hidden');
     sessionList.classList.remove('hidden');
@@ -120,6 +125,7 @@
   function showDetailView() {
     currentView = 'detail';
     backBtn.classList.remove('hidden');
+    resumeDetailBtn.classList.remove('hidden');
     headerTitle.textContent = currentDetail?.session?.title || 'Session Detail';
     tabBar.classList.remove('hidden');
     sessionList.classList.add('hidden');
@@ -187,6 +193,10 @@
             <span>${s.messageCount} msgs</span>
           </div>
           <div class="session-project">${esc(project)}</div>
+          <div class="session-actions">
+            <button class="resume-btn" data-session-id="${esc(s.sessionId)}" data-cwd="${esc(s.cwd || '')}"
+              title="Resume this session in terminal">▶ Resume</button>
+          </div>
         </div>`;
       }
       html += '</div>';
@@ -198,6 +208,16 @@
       el.addEventListener('click', () => {
         const fp = el.dataset.filepath;
         vscode.postMessage({ command: 'getSessionDetail', filePath: fp });
+      });
+    });
+
+    // Resume button click handlers
+    sessionList.querySelectorAll('.resume-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const sessionId = btn.dataset.sessionId;
+        const cwd = btn.dataset.cwd;
+        vscode.postMessage({ command: 'resumeSession', sessionId, cwd });
       });
     });
   }

@@ -169,6 +169,34 @@ body {
   margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
+/* Resume button in session list */
+.session-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.resume-btn {
+  background: var(--vscode-button-secondaryBackground, #3a3d41);
+  color: var(--vscode-button-secondaryForeground, #cccccc);
+  border: none;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.session-item:hover .resume-btn {
+  opacity: 1;
+}
+
+.resume-btn:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
 /* Session detail */
 #sessionDetail { flex: 1; overflow-y: auto; padding: 0 0 20px; }
 
