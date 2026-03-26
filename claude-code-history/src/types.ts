@@ -107,7 +107,8 @@ export type WebviewMessage =
   | { command: 'refresh' }
   | { command: 'getProjects' }
   | { command: 'exportMarkdown'; filePath: string }
-  | { command: 'resumeSession'; sessionId: string; cwd?: string };
+  | { command: 'resumeSession'; sessionId: string; cwd?: string }
+  | { command: 'copyResumeCommand'; sessionId: string; cwd?: string; projectPath?: string };
 
 /** Messages sent from extension to webview */
 export type ExtensionMessage =

@@ -17,6 +17,7 @@
   const headerTitle = $('headerTitle');
   const refreshBtn = $('refreshBtn');
   const resumeDetailBtn = $('resumeDetailBtn');
+  const copyResumeDetailBtn = $('copyResumeDetailBtn');
   const tabBar = $('tabBar');
   const searchInput = $('searchInput');
   const projectSelect = $('projectSelect');
@@ -36,6 +37,16 @@
   resumeDetailBtn.addEventListener('click', () => {
     if (currentDetail?.session?.sessionId) {
       vscode.postMessage({ command: 'resumeSession', sessionId: currentDetail.session.sessionId, cwd: currentDetail.session.cwd });
+    }
+  });
+  copyResumeDetailBtn.addEventListener('click', () => {
+    if (currentDetail?.session?.sessionId) {
+      vscode.postMessage({
+        command: 'copyResumeCommand',
+        sessionId: currentDetail.session.sessionId,
+        cwd: currentDetail.session.cwd,
+        projectPath: currentDetail.session.projectPath,
+      });
     }
   });
 
@@ -111,6 +122,7 @@
     currentView = 'list';
     backBtn.classList.add('hidden');
     resumeDetailBtn.classList.add('hidden');
+    copyResumeDetailBtn.classList.add('hidden');
     headerTitle.textContent = 'Claude History';
     tabBar.classList.add('hidden');
     sessionList.classList.remove('hidden');
@@ -126,6 +138,7 @@
     currentView = 'detail';
     backBtn.classList.remove('hidden');
     resumeDetailBtn.classList.remove('hidden');
+    copyResumeDetailBtn.classList.remove('hidden');
     headerTitle.textContent = currentDetail?.session?.title || 'Session Detail';
     tabBar.classList.remove('hidden');
     sessionList.classList.add('hidden');
@@ -196,6 +209,8 @@
           <div class="session-actions">
             <button class="resume-btn" data-session-id="${esc(s.sessionId)}" data-cwd="${esc(s.cwd || '')}"
               title="Resume this session in terminal">▶ Resume</button>
+            <button class="copy-resume-btn" data-session-id="${esc(s.sessionId)}" data-cwd="${esc(s.cwd || '')}" data-project="${esc(s.projectPath || '')}"
+              title="Copy resume command to clipboard">📋 Copy</button>
           </div>
         </div>`;
       }
@@ -218,6 +233,19 @@
         const sessionId = btn.dataset.sessionId;
         const cwd = btn.dataset.cwd;
         vscode.postMessage({ command: 'resumeSession', sessionId, cwd });
+      });
+    });
+
+    // Copy resume command button click handlers
+    sessionList.querySelectorAll('.copy-resume-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        vscode.postMessage({
+          command: 'copyResumeCommand',
+          sessionId: btn.dataset.sessionId,
+          cwd: btn.dataset.cwd,
+          projectPath: btn.dataset.project,
+        });
       });
     });
   }

@@ -198,6 +198,28 @@ export class SidePanelProvider implements vscode.WebviewViewProvider {
         }
         break;
       }
+
+      case 'copyResumeCommand': {
+        const sid = msg.sessionId;
+        if (sid) {
+          let dir: string | undefined;
+          if (msg.cwd && fs.existsSync(msg.cwd)) {
+            dir = msg.cwd;
+          } else if (msg.projectPath) {
+            const decoded = msg.projectPath.startsWith('-')
+              ? '/' + msg.projectPath.substring(1).replace(/-/g, '/')
+              : msg.projectPath.replace(/-/g, '/');
+            if (fs.existsSync(decoded)) {
+              dir = decoded;
+            }
+          }
+          const resumeCmd = `claude --resume "${sid}"`;
+          const fullCmd = dir ? `cd ${dir} && ${resumeCmd}` : resumeCmd;
+          await vscode.env.clipboard.writeText(fullCmd);
+          vscode.window.showInformationMessage('Resume command copied to clipboard');
+        }
+        break;
+      }
     }
   }
 
@@ -283,6 +305,7 @@ export class SidePanelProvider implements vscode.WebviewViewProvider {
         </button>
         <h2 id="headerTitle">Claude History</h2>
         <div class="header-actions">
+          <button id="copyResumeDetailBtn" class="icon-btn hidden" title="Copy resume command">📋</button>
           <button id="resumeDetailBtn" class="icon-btn hidden" title="Resume this session">▶</button>
           <button id="refreshBtn" class="icon-btn" title="Refresh">⟳</button>
         </div>

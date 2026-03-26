@@ -197,6 +197,28 @@ body {
   color: var(--accent-fg);
 }
 
+.copy-resume-btn {
+  background: var(--vscode-button-secondaryBackground, #3a3d41);
+  color: var(--vscode-button-secondaryForeground, #cccccc);
+  border: none;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+  margin-left: 4px;
+}
+
+.session-item:hover .copy-resume-btn {
+  opacity: 1;
+}
+
+.copy-resume-btn:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
 /* Session detail */
 #sessionDetail { flex: 1; overflow-y: auto; padding: 0 0 20px; }
 
