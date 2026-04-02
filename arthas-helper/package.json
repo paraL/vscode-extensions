@@ -1,0 +1,115 @@
+{
+  "name": "arthas-helper",
+  "displayName": "Arthas Helper",
+  "publisher": "ls",
+  "description": "Copy Arthas commands directly from Java methods",
+  "version": "0.0.1",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "arthasHelper.watch",
+        "title": "Watch"
+      },
+      {
+        "command": "arthasHelper.trace",
+        "title": "Trace"
+      },
+      {
+        "command": "arthasHelper.stack",
+        "title": "Stack"
+      },
+      {
+        "command": "arthasHelper.monitor",
+        "title": "Monitor"
+      },
+      {
+        "command": "arthasHelper.tt",
+        "title": "TimeTunnel Tt"
+      },
+      {
+        "command": "arthasHelper.jad",
+        "title": "Decompile Class Jad"
+      },
+      {
+        "command": "arthasHelper.sc",
+        "title": "Search Classes Loaded By Jvm Sc"
+      },
+      {
+        "command": "arthasHelper.sm",
+        "title": "Search Method Loaded By Jvm Sm"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "arthasHelper.contextMenu",
+        "label": "Arthas Command"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "arthasHelper.contextMenu",
+          "when": "editorLangId == java",
+          "group": "navigation"
+        }
+      ],
+      "arthasHelper.contextMenu": [
+        {
+          "command": "arthasHelper.watch",
+          "group": "1_main@1"
+        },
+        {
+          "command": "arthasHelper.trace",
+          "group": "1_main@2"
+        },
+        {
+          "command": "arthasHelper.stack",
+          "group": "1_main@3"
+        },
+        {
+          "command": "arthasHelper.monitor",
+          "group": "1_main@4"
+        },
+        {
+          "command": "arthasHelper.tt",
+          "group": "1_main@5"
+        },
+        {
+          "command": "arthasHelper.jad",
+          "group": "2_class@1"
+        },
+        {
+          "command": "arthasHelper.sc",
+          "group": "2_class@2"
+        },
+        {
+          "command": "arthasHelper.sm",
+          "group": "2_class@3"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "18.x",
+    "typescript": "^5.1.6",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0"
+  }
+}
