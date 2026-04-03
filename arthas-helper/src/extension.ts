@@ -50,6 +50,28 @@ export function activate(context: ExtensionContext) {
     register('arthasHelper.jad', generateJadCommand, false);
     register('arthasHelper.sc', generateScCommand, false);
     register('arthasHelper.sm', generateSmCommand, true);
+
+    const copyLocationCmd = commands.registerTextEditorCommand('arthasHelper.copyLocation', async (editor) => {
+        const document = editor.document;
+        const selection = editor.selection;
+        const fileName = document.fileName.split(/[/\\]/).pop() || '';
+        
+        const startLine = selection.start.line + 1;
+        const endLine = selection.end.line + 1;
+        
+        const absolutePath = document.fileName;
+        
+        let textToCopy = '';
+        if (startLine === endLine) {
+            textToCopy = `${absolutePath} L${startLine}`;
+        } else {
+            textToCopy = `${absolutePath} L${startLine}~L${endLine}`;
+        }
+        
+        await env.clipboard.writeText(textToCopy);
+        window.showInformationMessage(`Copied: ${textToCopy}`);
+    });
+    context.subscriptions.push(copyLocationCmd);
 }
 
 export function deactivate() {}

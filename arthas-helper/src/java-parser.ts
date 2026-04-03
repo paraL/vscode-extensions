@@ -29,18 +29,23 @@ export async function parseJavaContext(document: TextDocument, position: Positio
             const defArray = Array.isArray(definitions) ? definitions : (definitions ? [definitions] : []);
             
             if (defArray && defArray.length > 0) {
-                const defPos = defArray[0];
-                const defDoc = await workspace.openTextDocument(defPos.uri);
+                const defPos: any = defArray[0];
+                const targetUri = defPos.targetUri || defPos.uri;
+                const targetRange = defPos.targetSelectionRange || defPos.targetRange || defPos.range;
                 
-                // If it jumps out to another place (or even same file but a target method), 
-                // we can read its enclosing context.
-                const defContext = await getEnclosingContext(defDoc, defPos.range.start);
-                if (defContext && defContext.className) {
-                    return { 
-                        className: defContext.className, 
-                        // If we clicked on a method, the symbol provider of the target will say methodName=word.
-                        methodName: defContext.methodName || word 
-                    };
+                if (targetUri) {
+                    const defDoc = await workspace.openTextDocument(targetUri);
+                    
+                    // If it jumps out to another place (or even same file but a target method), 
+                    // we can read its enclosing context.
+                    const defContext = await getEnclosingContext(defDoc, targetRange.start);
+                    if (defContext && defContext.className) {
+                        return { 
+                            className: defContext.className, 
+                            // If we clicked on a method, the symbol provider of the target will say methodName=word.
+                            methodName: defContext.methodName || word 
+                        };
+                    }
                 }
             }
         } catch (e) {

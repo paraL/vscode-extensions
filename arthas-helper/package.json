@@ -46,6 +46,10 @@
       {
         "command": "arthasHelper.sm",
         "title": "Search Method Loaded By Jvm Sm"
+      },
+      {
+        "command": "arthasHelper.copyLocation",
+        "title": "Copy File Line(s)"
       }
     ],
     "submenus": [
@@ -59,7 +63,11 @@
         {
           "submenu": "arthasHelper.contextMenu",
           "when": "editorLangId == java",
-          "group": "navigation"
+          "group": "navigation@1"
+        },
+        {
+          "command": "arthasHelper.copyLocation",
+          "group": "navigation@2"
         }
       ],
       "arthasHelper.contextMenu": [
