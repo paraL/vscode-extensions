@@ -1,0 +1,19 @@
+<idea-plugin>
+    <id>com.github.ls.ai-helper</id>
+    <name>ai-helper</name>
+    <vendor>ls</vendor>
+    <description><![CDATA[
+        Copy file line locations from the editor.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <actions>
+        <action id="AiHelper.CopyLines"
+                class="com.github.ls.aihelper.CopyLinesAction"
+                text="Copy File Line(s)"
+                description="Copy absolute file path and selected line range">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
